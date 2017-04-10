@@ -21,8 +21,6 @@ signals:
 	void valuePushed(float newValue);
 
 private:
-	void timerEvent(QTimerEvent*);
-
 	float lastValue;
 	QString name;
 

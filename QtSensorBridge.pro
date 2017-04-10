@@ -1,10 +1,11 @@
 TEMPLATE = app
 
-QT += qml quick widgets
+QT += qml quick widgets serialport
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    sensor.cpp
+    sensor.cpp \
+    serialconnection.cpp
 
 RESOURCES += qml.qrc
 
@@ -15,4 +16,5 @@ QML_IMPORT_PATH =
 include(deployment.pri)
 
 HEADERS += \
-    sensor.h
+    sensor.h \
+    serialconnection.h

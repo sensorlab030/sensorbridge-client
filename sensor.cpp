@@ -3,9 +3,7 @@
 
 #include <QDebug>
 
-Sensor::Sensor(QObject* parent) : QObject(parent) {
-	startTimer(1000);
-}
+Sensor::Sensor(QObject* parent) : QObject(parent) {}
 
 float Sensor::getLastValue() const {
 	return lastValue;
@@ -14,12 +12,6 @@ float Sensor::getLastValue() const {
 void Sensor::pushValue(float value) {
 	lastValue = value;
 	emit valuePushed(lastValue);
-}
-
-void Sensor::timerEvent(QTimerEvent*) {
-	float val = ((float) rand() / (RAND_MAX));
-	qDebug() << "C++" << val;
-	pushValue(val);
 }
 
 void Sensor::setName(const QString &name) {
