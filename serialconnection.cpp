@@ -10,7 +10,7 @@
 
 SerialConnection::SerialConnection(QObject *parent) : QObject(parent) {
 
-	for (int  i = 0; i < SENSOR_COUNT; i++) {
+	for (int  i = 0; i < SERIAL_ANALOG_SENSORS; i++) {
 		sensors[i] = new Sensor(this);
 	}
 
@@ -24,13 +24,12 @@ SerialConnection::SerialConnection(QObject *parent) : QObject(parent) {
 }
 
 int SerialConnection::getSensorCount() {
-	return SENSOR_COUNT;
+	return SERIAL_ANALOG_SENSORS;
 }
 
 QList<Sensor*> SerialConnection::getSensors() {
 	QList<Sensor*> list;
-	for (int i = 0; i < SENSOR_COUNT; i++) {
-
+	for (int i = 0; i < SERIAL_ANALOG_SENSORS; i++) {
 		list.append(sensors[i]);
 	}
 	return list;
@@ -69,13 +68,13 @@ void SerialConnection::readData() {
 		// Take data collection from buffer
 		QByteArray segment = buffer->left(index -1);
 		buffer->remove(0, index + 1);
-		if (segment.size() != SENSOR_COUNT * 2) {
+		if (segment.size() != SERIAL_ANALOG_SENSORS * 2) {
 			continue;
 		}
 
 		// Parse sensor readings
 		QDataStream dataStream(segment);
-		for (int i = 0; i < SENSOR_COUNT; i++) {
+		for (int i = 0; i < SERIAL_ANALOG_SENSORS; i++) {
 			quint16 value;
 			dataStream >> value;
 			sensors[i]->pushValue((float) value / 1023.0);

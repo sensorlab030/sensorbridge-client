@@ -1,8 +1,6 @@
 #ifndef SERIALCONNECTION_H
 #define SERIALCONNECTION_H
 
-#define SENSOR_COUNT 6			//!< How many sensors we expose via the serial port
-
 #include <QObject>
 
 class QSerialPort;
@@ -27,9 +25,9 @@ private slots:
 	void readData();									//!< Parse available data on the serial port
 
 private:
-	Sensor*					sensors[SENSOR_COUNT];		//!< The sensors
-	QSerialPort*			port;						//!< The serial port that the sensors communicate over
-	QByteArray*				buffer;						//!< Serial buffer
+	Sensor*					sensors[SERIAL_ANALOG_SENSORS];		//!< The sensors
+	QSerialPort*			port;								//!< The serial port that the sensors communicate over
+	QByteArray*				buffer;								//!< Serial buffer
 
 };
 

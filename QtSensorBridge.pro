@@ -6,7 +6,8 @@ CONFIG += c++11
 SOURCES += main.cpp \
     sensor.cpp \
     serialconnection.cpp \
-    websocketserver.cpp
+    sensoroutput.cpp \
+    websocketoutput.cpp
 
 RESOURCES += qml.qrc
 
@@ -19,4 +20,9 @@ include(deployment.pri)
 HEADERS += \
     sensor.h \
     serialconnection.h \
-    websocketserver.h
+    sensoroutput.h \
+    websocketoutput.h \
+    sensoroutputformatter.h
+
+DEFINES += \
+    SERIAL_ANALOG_SENSORS=6

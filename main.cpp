@@ -1,25 +1,23 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+
 #include "sensor.h"
 #include "serialconnection.h"
-#include "websocketserver.h"
+#include "websocketoutput.h"
+#include "sensoroutput.h"
 
 int main(int argc, char *argv[]) {
 	QApplication app(argc, argv);
 
-	WebSocketServer* server = new WebSocketServer(&app);
-	server->startServer(9001);
+	SerialConnection* connection = new SerialConnection(&app);
+	connection->openConnection("COM6");
 
-//	SerialConnection* connection = new SerialConnection(&app);
-//	connection->openConnection("COM6");
-
-//	// Prep models
-//	Sensor s1 = new Sensor(&app);
-//	s1.setName("Sensor Foo");
-
-//	Sensor s2 = new Sensor(&app);
-//	s2.setName("Sensor Bar");
+	WebSocketOutput* server = new WebSocketOutput(&app);
+	for(Sensor* s: connection->getSensors()) {
+		server->addSensor(s);
+	}
+	server->start(1000);
 
 	// Setup QML engine
 	QQmlApplicationEngine engine;
