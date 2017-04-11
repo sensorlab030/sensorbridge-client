@@ -1,11 +1,12 @@
 TEMPLATE = app
 
-QT += qml quick widgets serialport
+QT += qml quick widgets serialport websockets network
 CONFIG += c++11
 
 SOURCES += main.cpp \
     sensor.cpp \
-    serialconnection.cpp
+    serialconnection.cpp \
+    websocketserver.cpp
 
 RESOURCES += qml.qrc
 
@@ -17,4 +18,5 @@ include(deployment.pri)
 
 HEADERS += \
     sensor.h \
-    serialconnection.h
+    serialconnection.h \
+    websocketserver.h

@@ -3,12 +3,16 @@
 #include <QQmlContext>
 #include "sensor.h"
 #include "serialconnection.h"
+#include "websocketserver.h"
 
 int main(int argc, char *argv[]) {
 	QApplication app(argc, argv);
 
-	SerialConnection* connection = new SerialConnection(&app);
-	connection->openConnection("COM6");
+	WebSocketServer* server = new WebSocketServer(&app);
+	server->startServer(9001);
+
+//	SerialConnection* connection = new SerialConnection(&app);
+//	connection->openConnection("COM6");
 
 //	// Prep models
 //	Sensor s1 = new Sensor(&app);
