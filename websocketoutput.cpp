@@ -4,9 +4,6 @@
 #include <QtNetwork>
 #include "sensoroutputformatter.h"
 
-#include <QDebug>
-#include "time.h"
-
 WebSocketOutput::WebSocketOutput(QObject *parent) : SensorOutput(parent) {
 	_port = 9001;
 
@@ -28,12 +25,10 @@ void WebSocketOutput::setPort(quint16 port) {
 }
 
 void WebSocketOutput::startCapture() {
-	qDebug() << "WS Start capture";
 	_socketServer->listen(QHostAddress::Any, _port);
 }
 
 void WebSocketOutput::stopCapture() {
-	qDebug() << "WS Stop capture";
 	if (_socketServer->isListening()) {
 
 		// Close socket
@@ -46,12 +41,10 @@ void WebSocketOutput::stopCapture() {
 }
 
 void WebSocketOutput::handleCapture(const QList<float>& data) {
-
 	QString formattedData = SensorOutputFormatter::formatAsJson(data);
 	for (QWebSocket* clientSocket: _clients) {
 		clientSocket->sendTextMessage(formattedData);
 	}
-
 }
 
 void WebSocketOutput::onNewConnection() {

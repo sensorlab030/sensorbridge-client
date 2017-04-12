@@ -7,7 +7,12 @@ SOURCES += main.cpp \
     sensor.cpp \
     serialconnection.cpp \
     sensoroutput.cpp \
-    websocketoutput.cpp
+    websocketoutput.cpp \
+    ui/mainwindow.cpp \
+    ui/websocketsettingswidget.cpp \
+    ui/outputsettingsdialog.cpp \
+    ui/outputsettingswidget.cpp \
+    ui/csvfilesettingswidget.cpp
 
 RESOURCES += qml.qrc
 
@@ -22,7 +27,13 @@ HEADERS += \
     serialconnection.h \
     sensoroutput.h \
     websocketoutput.h \
-    sensoroutputformatter.h
+    sensoroutputformatter.h \
+    ui/mainwindow.h \
+    ui/websocketsettingswidget.h \
+    ui/outputsettingsdialog.h \
+    ui/outputsettingswidget.h \
+    ui/csvfilesettingswidget.h
 
 DEFINES += \
-    SERIAL_ANALOG_SENSORS=6
+    SERIAL_ANALOG_SENSORS=6 \
+    APP_VERSION=\\\"0.1.0\\\"
