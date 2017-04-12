@@ -101,6 +101,7 @@ void MainWindow::openSettings() {
 
 		_output = dialog.getSensorOutput();
 		if (_output) {
+			_output->setParent(this);
 			for(Sensor* s: _sensors) {
 				_output->addSensor(s);
 			}

@@ -9,6 +9,7 @@
 #include <QFileDialog>
 #include <QDir>
 #include <QDebug>
+#include "csvfileoutput.h"
 
 CsvFileSettingsWidget::CsvFileSettingsWidget(QWidget *parent) : OutputSettingsWidget(parent) {
 
@@ -53,5 +54,8 @@ bool CsvFileSettingsWidget::validateInput() {
 }
 
 SensorOutput* CsvFileSettingsWidget::getSensorOutput(int interval) {
-	return 0;
+	CsvFileOutput* output = new CsvFileOutput();
+	output->setInterval(interval);
+	output->setPath(_pathInput->text());
+	return output;
 }

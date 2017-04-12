@@ -4,12 +4,13 @@
 #include "outputsettingswidget.h"
 
 class QLineEdit;
+class SensorOutput;
 
 class CsvFileSettingsWidget : public OutputSettingsWidget {
 	Q_OBJECT
 
 public:
-	CsvFileSettingsWidget(QWidget *parent = 0);
+	explicit CsvFileSettingsWidget(QWidget *parent = 0);
 
 	bool			validateInput();
 	SensorOutput*	getSensorOutput(int interval);
@@ -19,6 +20,7 @@ private slots:
 
 private:
 	QLineEdit*		_pathInput;
+
 };
 
 #endif // CSVFILESETTINGSWIDGET_H

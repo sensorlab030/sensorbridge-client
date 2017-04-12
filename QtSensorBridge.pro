@@ -13,7 +13,8 @@ SOURCES += main.cpp \
     ui/outputsettingswidget.cpp \
     ui/csvfilesettingswidget.cpp \
     ui/sensorwidget.cpp \
-    ui/settingsdialog.cpp
+    ui/settingsdialog.cpp \
+    csvfileoutput.cpp
 
 # Default rules for deployment.
 include(deployment.pri)
@@ -29,7 +30,8 @@ HEADERS += \
     ui/outputsettingswidget.h \
     ui/csvfilesettingswidget.h \
     ui/sensorwidget.h \
-    ui/settingsdialog.h
+    ui/settingsdialog.h \
+    csvfileoutput.h
 
 DEFINES += \
     SERIAL_ANALOG_SENSORS=6 \
