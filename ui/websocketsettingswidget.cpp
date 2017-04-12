@@ -1,6 +1,7 @@
 #include "websocketsettingswidget.h"
 
-#include <QFormLayout>
+#include <QGridLayout>
+#include <QLabel>
 #include <QLineEdit>
 #include <QIntValidator>
 #include <QToolTip>
@@ -14,8 +15,12 @@ WebSocketSettingsWidget::WebSocketSettingsWidget(QWidget *parent) : OutputSettin
 	_portInput->setMaximumWidth(100);
 	_portInput->setToolTip("Websocket port (should be between 1024 and 32768)");
 
-	QFormLayout* layout = new QFormLayout();
-	layout->addRow("Port", _portInput);
+	QGridLayout* layout = new QGridLayout();
+	layout->setMargin(0);
+	layout->setColumnMinimumWidth(0, 130);
+	layout->setColumnStretch(0, 0);
+	layout->addWidget(new QLabel("Port"), 0, 0);
+	layout->addWidget(_portInput, 0, 1, 1, Qt::AlignLeft);
 	setLayout(layout);
 
 }

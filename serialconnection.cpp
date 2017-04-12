@@ -12,6 +12,7 @@ SerialConnection::SerialConnection(QObject *parent) : QObject(parent) {
 
 	for (int  i = 0; i < SERIAL_ANALOG_SENSORS; i++) {
 		sensors[i] = new Sensor(this);
+		sensors[i]->setName(QString("SERIAL_%1").arg(i));
 	}
 
 	buffer = new QByteArray();
@@ -82,5 +83,9 @@ void SerialConnection::readData() {
 
 	}
 
+}
+
+QString SerialConnection::portName() const {
+	return port->portName();
 }
 

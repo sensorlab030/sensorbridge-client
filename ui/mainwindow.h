@@ -4,6 +4,10 @@
 #include <QMainWindow>
 
 class QPushButton;
+class QLabel;
+class QHBoxLayout;
+class Sensor;
+class SerialConnection;
 class SensorOutput;
 
 class MainWindow : public QMainWindow {
@@ -15,17 +19,20 @@ public:
 signals:
 	void outputChanged(SensorOutput* output);
 
-public slots:
-
 private slots:
-	void setupOutput();
+	void openSettings();
 	void startCapture();
 	void stopCapture();
 	void onOutputChanged();
 
 private:
+	QHBoxLayout *setupSensorsUI();
+
+	QList<Sensor*>		_sensors;
+	SerialConnection*	_serialConnection;
 	SensorOutput*		_output = 0;
 
+	QLabel*				_outputDescriptionLbl;
 	QPushButton*		_startCaptureBtn;
 	QPushButton*		_stopCaptureBtn;
 

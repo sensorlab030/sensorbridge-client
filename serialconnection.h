@@ -17,6 +17,8 @@ public:
 	static int getSensorCount();						//!< Get the sensor count
 	QList<Sensor*> getSensors();						//!< Get a list of sensors
 
+	QString portName() const;
+
 public slots:
 	void openConnection(const QString &portName);		//!< Open the serial connection and read the serial data
 	void closeConnection();								//!< Close the serial connection

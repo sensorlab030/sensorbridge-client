@@ -1,6 +1,7 @@
 #include "csvfilesettingswidget.h"
 
-#include <QFormLayout>
+#include <QGridLayout>
+#include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QToolTip>
@@ -21,11 +22,14 @@ CsvFileSettingsWidget::CsvFileSettingsWidget(QWidget *parent) : OutputSettingsWi
 
 	QHBoxLayout* fileLayout = new QHBoxLayout();
 	fileLayout->addWidget(_pathInput);
-	fileLayout->addSpacing(20);
 	fileLayout->addWidget(browseButton);
 
-	QFormLayout* layout = new QFormLayout();
-	layout->addRow("Capture directory", fileLayout);
+	QGridLayout* layout = new QGridLayout();
+	layout->setMargin(0);
+	layout->setColumnMinimumWidth(0, 130);
+	layout->setColumnStretch(0, 0);
+	layout->addWidget(new QLabel("Capture directory"), 0, 0);
+	layout->addLayout(fileLayout, 0, 1, 1, Qt::AlignLeft);
 	setLayout(layout);
 
 }

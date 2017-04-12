@@ -49,7 +49,7 @@ void SensorOutput::timerEvent(QTimerEvent*) {
 	// Capture data from sensors
 	QList<float> data;
 	for (int i = 0; i < _sensors.count(); i++) {
-		data.append(_sensors.at(i)->getLastValue());
+		data.append(_sensors.at(i)->lastValue());
 	}
 
 	// Let implementation class handle the data

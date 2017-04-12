@@ -3,21 +3,22 @@
 
 #include <QDebug>
 
-Sensor::Sensor(QObject* parent) : QObject(parent) {}
+Sensor::Sensor(QObject* parent) : QObject(parent) {
+	_lastValue = 0;
+}
 
-float Sensor::getLastValue() const {
-	return lastValue;
+float Sensor::lastValue() const {
+	return _lastValue;
 }
 
 void Sensor::pushValue(float value) {
-	lastValue = value;
-	emit valuePushed(lastValue);
+	_lastValue = value;
 }
 
 void Sensor::setName(const QString &name) {
-	this->name =name;
+	this->_name =name;
 }
 
-QString Sensor::getName() const {
-	return name;
+QString Sensor::name() const {
+	return _name;
 }

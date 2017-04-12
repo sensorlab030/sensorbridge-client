@@ -3,14 +3,21 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QLabel>
+#include <QDebug>
 
+#include "serialconnection.h"
 #include "sensoroutput.h"
-#include "outputsettingsdialog.h"
+#include "settingsdialog.h"
+#include "sensorwidget.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
+	// Setup serial connection
+	_serialConnection = new SerialConnection(this);
+	_sensors.append(_serialConnection->getSensors());
+
 	QPushButton* btn = new QPushButton("Setup");
-	connect(btn, &QPushButton::clicked, this, &MainWindow::setupOutput);
+	connect(btn, &QPushButton::clicked, this, &MainWindow::openSettings);
 
 	_startCaptureBtn = new QPushButton("Start capture");
 	connect(_startCaptureBtn, SIGNAL(clicked(bool)), this, SLOT(startCapture()));
@@ -19,9 +26,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	_stopCaptureBtn->hide();
 	connect(_stopCaptureBtn, SIGNAL(clicked(bool)), this, SLOT(stopCapture()));
 
+	_outputDescriptionLbl = new QLabel();
+
 	// Setup capture layout
 	QHBoxLayout* captureLayout = new QHBoxLayout();
-	captureLayout->addWidget(new QLabel("Output setup: websocket@9001 @100ms"));
+	captureLayout->addWidget(_outputDescriptionLbl);
 	captureLayout->addStretch();
 	captureLayout->addWidget(btn);
 	captureLayout->addSpacing(40);
@@ -30,14 +39,30 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
 	// Set central widget
 	QVBoxLayout* centralLayout = new QVBoxLayout();
-	centralLayout->addStretch();
-	centralLayout->addLayout(captureLayout);
+	centralLayout->addLayout(setupSensorsUI());
+	centralLayout->addLayout(captureLayout, 0);
 	QWidget* centralWidget = new QWidget(this);
 	centralWidget->setLayout(centralLayout);
 	setCentralWidget(centralWidget);
 
 	connect(this, SIGNAL(outputChanged(SensorOutput*)), this, SLOT(onOutputChanged()));
 	onOutputChanged();
+}
+
+QHBoxLayout* MainWindow::setupSensorsUI() {
+
+	QHBoxLayout* layout = new QHBoxLayout();
+	layout->setMargin(0);
+	layout->setContentsMargins(0, 0, 0,0);
+	layout->setSpacing(0);
+
+	for (Sensor* s: _sensors) {
+		SensorWidget* widget = new SensorWidget(s);
+		layout->addWidget(widget);
+	}
+
+	return layout;
+
 }
 
 void MainWindow::startCapture() {
@@ -54,19 +79,32 @@ void MainWindow::stopCapture() {
 
 void MainWindow::onOutputChanged() {
 	_startCaptureBtn->setEnabled((_output != 0));
+	_outputDescriptionLbl->setText((_output != 0) ? _output->description() : "No output configured");
 }
 
-void MainWindow::setupOutput() {
-	OutputSettingsDialog dialog(this);
+void MainWindow::openSettings() {
+	SettingsDialog dialog(this);
 
 	if (dialog.exec() == QDialog::Accepted) {
 
+		// Setup serial
+		if (dialog.getSerialPort() != _serialConnection->portName()) {
+			_serialConnection->closeConnection();
+			_serialConnection->openConnection(dialog.getSerialPort());
+		}
+
+		// Setup output
 		if (_output != 0) {
 			delete _output;
 			_output = 0;
 		}
 
 		_output = dialog.getSensorOutput();
+		if (_output) {
+			for(Sensor* s: _sensors) {
+				_output->addSensor(s);
+			}
+		}
 		emit outputChanged(_output);
 
 	}

@@ -20,6 +20,7 @@ public:
 	void addSensor(Sensor* sensor);				//!< Add sensor to output
 	void removeSensor(Sensor* sensor);			//!< Remove sensor from output
 	int interval() const;						//!< Returns the capture interval in ms
+	virtual QString description() const = 0;	//!< Returns a description of output and its settings
 
 signals:
 	void intervalChanged(int interval);		//!< Signal that is emitted when the interval changes

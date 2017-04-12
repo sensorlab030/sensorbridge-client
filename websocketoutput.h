@@ -18,6 +18,7 @@ class WebSocketOutput : public SensorOutput {
 public:
 	explicit WebSocketOutput(QObject *parent = 0);		//!< Class constructor
 	int port() const;									//!< Returns the websocket port number
+	QString description() const;						//!< Returns a description of output and its settings
 
 public slots:
 	void setPort(quint16 port);							//!< Set the websocket port number

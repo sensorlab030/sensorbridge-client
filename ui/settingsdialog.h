@@ -1,5 +1,5 @@
-#ifndef OUTPUTSETTINGSDIALOG_H
-#define OUTPUTSETTINGSDIALOG_H
+#ifndef SETTINGSDIALOG_H
+#define SETTINGSDIALOG_H
 
 #include <QDialog>
 
@@ -11,12 +11,13 @@ class OutputSettingsWidget;
 class WebSocketSettingsWidget;
 class CsvFileSettingsWidget;
 
-class OutputSettingsDialog : public QDialog {
+class SettingsDialog : public QDialog {
 	Q_OBJECT
 
 public:
-	OutputSettingsDialog(QWidget* parent = 0);
+	SettingsDialog(QWidget* parent = 0);
 
+	QString							getSerialPort();
 	SensorOutput*					getSensorOutput();
 
 private slots:
@@ -25,6 +26,7 @@ private slots:
 private:
 	OutputSettingsWidget*			currentOutputWidget();
 
+	QComboBox*						_serialPortSelectionBox;
 	QComboBox*						_outputSelectionBox;
 	QLineEdit*						_intervalInput;
 	QStackedLayout*					_settingsWidgetStack;
@@ -34,4 +36,4 @@ private:
 
 };
 
-#endif // OUTPUTSETTINGSDIALOG_H
+#endif // SETTINGSDIALOG_H
