@@ -108,4 +108,5 @@ void MainWindow::openSettings() {
 		emit outputChanged(_output);
 
 	}
+
 }
