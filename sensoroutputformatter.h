@@ -7,11 +7,9 @@
 
 class SensorOutputFormatter {
 
-private:
+public:
 	static const char csvFieldSeparator = ',';
 	static const char csvLineSeparator = '\n';
-
-public:
 
 	/*!
 	 * Format given data list as a JSON object in a QString
@@ -30,6 +28,9 @@ public:
 		return json;
 	}
 
+	/*!
+	 * Get CSV line header corresponding to the formatAsCsv output
+	 */
 	static QString csvFormatHeader() {
 
 		QString line;
@@ -45,6 +46,9 @@ public:
 		return line;
 	}
 
+	/*!
+	 * Format given data list as a CSV line in a QString
+	 */
 	static QString formatAsCsv(const QList<float>& data) {
 
 		QString line;
@@ -59,6 +63,8 @@ public:
 
 		return line;
 	}
+
+
 
 };
 

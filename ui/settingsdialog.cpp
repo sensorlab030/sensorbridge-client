@@ -15,6 +15,7 @@
 #include "sensoroutput.h"
 #include "websocketsettingswidget.h"
 #include "csvfilesettingswidget.h"
+#include "jsonfilesettingswidget.h"
 
 SettingsDialog::SettingsDialog(QWidget* parent) : QDialog(parent) {
 	setWindowTitle("Configure sensor output");
@@ -32,7 +33,7 @@ SettingsDialog::SettingsDialog(QWidget* parent) : QDialog(parent) {
 	_outputSelectionBox = new QComboBox(this);
 	_outputSelectionBox->addItem("Websocket");
 	_outputSelectionBox->addItem("CSV file");
-//	_outputSelectionBox->addItem("JSON file");
+	_outputSelectionBox->addItem("JSON file");
 
 	// Interval
 	_intervalInput = new QLineEdit();
@@ -44,6 +45,7 @@ SettingsDialog::SettingsDialog(QWidget* parent) : QDialog(parent) {
 	// Output widgets & interval
 	_webSocketSettings = new WebSocketSettingsWidget();
 	_csvFileSettings = new CsvFileSettingsWidget();
+	_jsonFileSettings = new JsonFileSettingsWidget();
 
 	// Accept button
 	QPushButton* acceptButton = new QPushButton("Ok");
@@ -64,6 +66,7 @@ SettingsDialog::SettingsDialog(QWidget* parent) : QDialog(parent) {
 	_settingsWidgetStack = new QStackedLayout();
 	_settingsWidgetStack->addWidget(_webSocketSettings);
 	_settingsWidgetStack->addWidget(_csvFileSettings);
+	_settingsWidgetStack->addWidget(_jsonFileSettings);
 	connect(_outputSelectionBox, SIGNAL(activated(int)), _settingsWidgetStack, SLOT(setCurrentIndex(int)));
 
 	// Bottom layout

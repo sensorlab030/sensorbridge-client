@@ -2,8 +2,6 @@
 
 #include <QDir>
 #include <QDateTime>
-#include <QDebug>
-#include <QTextStream>
 #include "sensoroutputformatter.h"
 
 CsvFileOutput::CsvFileOutput(QObject *parent) : SensorOutput(parent) {

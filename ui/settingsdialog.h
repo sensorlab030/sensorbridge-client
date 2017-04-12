@@ -10,6 +10,7 @@ class SensorOutput;
 class OutputSettingsWidget;
 class WebSocketSettingsWidget;
 class CsvFileSettingsWidget;
+class JsonFileSettingsWidget;
 
 class SettingsDialog : public QDialog {
 	Q_OBJECT
@@ -33,6 +34,7 @@ private:
 
 	WebSocketSettingsWidget*		_webSocketSettings;
 	CsvFileSettingsWidget*			_csvFileSettings;
+	JsonFileSettingsWidget*			_jsonFileSettings;
 
 };
 

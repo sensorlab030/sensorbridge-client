@@ -6,7 +6,7 @@
 class QFile;
 
 /*!
- * WebSocketOutput
+ * CsvFileOutput
  * Implementation of SensorOutput as a CSV file writer. The data captured
  * via SensorOutput will be formatted as CSV and written to file
  */
