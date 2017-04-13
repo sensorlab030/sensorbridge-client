@@ -12,6 +12,9 @@ class WebSocketSettingsWidget;
 class CsvFileSettingsWidget;
 class JsonFileSettingsWidget;
 
+/**
+ * @brief The SettingsDialog class
+ */
 class SettingsDialog : public QDialog {
 	Q_OBJECT
 

@@ -34,7 +34,7 @@ private slots:
 protected:
 	void startCapture();								//!< Start the websocket server
 	void stopCapture();									//!< Stop the websocket server
-	void handleCapture(const QList<float>& data);					//!< Send capture data to all connected clients
+	void handleCapture(const QList<float>& data);		//!< Send capture data to all connected clients
 
 private:
 	quint16				_port;							//!< The websocket port number

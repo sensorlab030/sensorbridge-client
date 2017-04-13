@@ -32,9 +32,25 @@ public slots:
 	void setInterval(int interval);		//!< Set capture interval in ms
 
 protected:
-	virtual void startCapture() = 0;						//!< Start capture method to be implemented by specialized classes for initialization
-	virtual void stopCapture() = 0;							//!< Stop capture method to be implemented by specialized classes for cleanup
-	virtual void handleCapture(const QList<float>&) = 0;	//!< Handle captured data to be implemented by specialized classes
+
+	/*!
+	 * startCapture
+	 * Start capture method to be implemented by specialized classes for initialization. When
+	 * this method is called, it's guaranteed that the capture in not running
+	 */
+	virtual void startCapture() = 0;
+
+	/*!
+	 * stopCapture
+	 * Stop capture method to be implemented by specialized classes for cleanup. It's guaranteed
+	 * that the capture is running when this method is called
+	 */
+	virtual void stopCapture() = 0;
+
+	/*! handleCapture
+	 * Handle captured data to be implemented by specialized classes
+	 */
+	virtual void handleCapture(const QList<float>&) = 0;
 
 private:
 	void timerEvent(QTimerEvent*);		//!< Called at capture interval

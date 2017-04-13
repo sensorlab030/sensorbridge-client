@@ -5,6 +5,10 @@
 #include <QStringBuilder>
 #include <QList>
 
+/*!
+ * SensorOutputFormatter
+ * Collection of formatting methods for the data series
+ */
 class SensorOutputFormatter {
 
 public:
@@ -63,8 +67,6 @@ public:
 
 		return line;
 	}
-
-
 
 };
 
