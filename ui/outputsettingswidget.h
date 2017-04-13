@@ -12,7 +12,8 @@ public:
 	explicit OutputSettingsWidget(QWidget *parent = 0);
 
 	virtual bool validateInput() = 0;								//!< Validate input
-	virtual SensorOutput* getSensorOutput(int interval) = 0;		//!<
+	virtual SensorOutput* getSensorOutput(int interval) = 0;		//!< Get the sensor with the current input
+	virtual void storeCurrentSettings() const = 0;						//!< Store the current settings
 
 };
 

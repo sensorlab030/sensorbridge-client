@@ -37,6 +37,5 @@ HEADERS += \
     jsonfileoutput.h \
     ui/jsonfilesettingswidget.h
 
-DEFINES += \
-    SERIAL_ANALOG_SENSORS=6 \
-    APP_VERSION=\\\"0.1.0\\\"
+DEFINES += SERIAL_ANALOG_SENSORS=6
+

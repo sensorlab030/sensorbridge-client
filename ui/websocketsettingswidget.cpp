@@ -5,13 +5,14 @@
 #include <QLineEdit>
 #include <QIntValidator>
 #include <QToolTip>
+#include <QSettings>
 #include "websocketoutput.h"
 
 WebSocketSettingsWidget::WebSocketSettingsWidget(QWidget *parent) : OutputSettingsWidget(parent) {
 
 	_portInput = new QLineEdit();
 	_portInput->setValidator(new QIntValidator(1024, 32768));
-	_portInput->setText("9001");
+	_portInput->setText(QSettings().value("websocket/port", 9001).toString());
 	_portInput->setMaximumWidth(100);
 	_portInput->setToolTip("Websocket port (should be between 1024 and 32768)");
 
@@ -42,4 +43,9 @@ SensorOutput* WebSocketSettingsWidget::getSensorOutput(int interval) {
 	output->setInterval(interval);
 	output->setPort(_portInput->text().toInt());
 	return output;
+}
+
+void WebSocketSettingsWidget::storeCurrentSettings() const {
+	QSettings settings;
+	settings.setValue("websocket/port", _portInput->text().toInt());
 }

@@ -37,7 +37,7 @@ SensorWidget::SensorWidget(Sensor* sensor, QWidget *parent) : QWidget(parent) {
 	layout->addWidget(chartView);
 	setLayout(layout);
 
-	startTimer(500);
+	startTimer(100);
 }
 
 

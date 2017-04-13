@@ -8,13 +8,13 @@
 #include <QHBoxLayout>
 #include <QFileDialog>
 #include <QDir>
-#include <QDebug>
+#include <QSettings>
 #include "csvfileoutput.h"
 
 CsvFileSettingsWidget::CsvFileSettingsWidget(QWidget *parent) : OutputSettingsWidget(parent) {
 
 	_pathInput = new QLineEdit();
-	_pathInput->setText(QDir::homePath());
+	_pathInput->setText(QSettings().value("jsonfile/path", QDir::homePath()).toString());
 	_pathInput->setToolTip("Directory where the files will be saved");
 
 	QPushButton* browseButton = new QPushButton("Select");
@@ -58,4 +58,9 @@ SensorOutput* CsvFileSettingsWidget::getSensorOutput(int interval) {
 	output->setInterval(interval);
 	output->setPath(_pathInput->text());
 	return output;
+}
+
+void CsvFileSettingsWidget::storeCurrentSettings() const {
+	QSettings settings;
+	settings.setValue("csvfile/path", _pathInput->text());
 }

@@ -14,6 +14,7 @@ public:
 
 	bool			validateInput();
 	SensorOutput*	getSensorOutput(int interval);
+	void			storeCurrentSettings() const;
 
 private:
 	QLineEdit*	_portInput;

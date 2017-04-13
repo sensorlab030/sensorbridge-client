@@ -8,13 +8,13 @@
 #include <QHBoxLayout>
 #include <QFileDialog>
 #include <QDir>
+#include <QSettings>
 #include "jsonfileoutput.h"
-
 
 JsonFileSettingsWidget::JsonFileSettingsWidget(QWidget *parent) : OutputSettingsWidget(parent) {
 
 	_pathInput = new QLineEdit();
-	_pathInput->setText(QDir::homePath());
+	_pathInput->setText(QSettings().value("jsonfile/path", QDir::homePath()).toString());
 	_pathInput->setToolTip("Directory where the files will be saved");
 
 	QPushButton* browseButton = new QPushButton("Select");
@@ -58,4 +58,9 @@ SensorOutput* JsonFileSettingsWidget::getSensorOutput(int interval) {
 	output->setInterval(interval);
 	output->setPath(_pathInput->text());
 	return output;
+}
+
+void JsonFileSettingsWidget::storeCurrentSettings() const {
+	QSettings settings;
+	settings.setValue("jsonfile/path", _pathInput->text());
 }
