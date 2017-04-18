@@ -13,6 +13,7 @@ float Sensor::lastValue() const {
 
 void Sensor::pushValue(float value) {
 	_lastValue = value;
+	emit valueAdded(_lastValue);
 }
 
 void Sensor::setName(const QString &name) {

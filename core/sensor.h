@@ -20,6 +20,9 @@ public:
 	void setName (const QString& name);			//!< Set the sensor name
 	QString name() const;						//!< Get the sensor name
 
+signals:
+	void	valueAdded(float value);
+
 private:
 	float				_lastValue;				//!< The last value
 	QString				_name;					//!< The sensor name

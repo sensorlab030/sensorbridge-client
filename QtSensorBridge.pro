@@ -4,38 +4,42 @@ QT += widgets serialport websockets charts
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    sensor.cpp \
-    serialconnection.cpp \
-    sensoroutput.cpp \
-    websocketoutput.cpp \
+    core/sensor.cpp \
+    core/serialconnection.cpp \
+    core/sensoroutput.cpp \
+    core/websocketoutput.cpp \
     ui/mainwindow.cpp \
     ui/websocketsettingswidget.cpp \
     ui/outputsettingswidget.cpp \
     ui/csvfilesettingswidget.cpp \
     ui/sensorwidget.cpp \
     ui/settingsdialog.cpp \
-    csvfileoutput.cpp \
-    jsonfileoutput.cpp \
-    ui/jsonfilesettingswidget.cpp
+    core/csvfileoutput.cpp \
+    core/jsonfileoutput.cpp \
+    ui/jsonfilesettingswidget.cpp \
+    ui/uisensor.cpp \
+    core/bridgeengine.cpp
 
 # Default rules for deployment.
 include(deployment.pri)
 
 HEADERS += \
-    sensor.h \
-    serialconnection.h \
-    sensoroutput.h \
-    websocketoutput.h \
-    sensoroutputformatter.h \
+    core/sensor.h \
+    core/serialconnection.h \
+    core/sensoroutput.h \
+    core/websocketoutput.h \
+    core/sensoroutputformatter.h \
     ui/mainwindow.h \
     ui/websocketsettingswidget.h \
     ui/outputsettingswidget.h \
     ui/csvfilesettingswidget.h \
     ui/sensorwidget.h \
     ui/settingsdialog.h \
-    csvfileoutput.h \
-    jsonfileoutput.h \
-    ui/jsonfilesettingswidget.h
+    core/csvfileoutput.h \
+    core/jsonfileoutput.h \
+    ui/jsonfilesettingswidget.h \
+    ui/uisensor.h \
+    core/bridgeengine.h
 
 DEFINES += SERIAL_ANALOG_SENSORS=6
 

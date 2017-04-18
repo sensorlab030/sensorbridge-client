@@ -4,7 +4,6 @@
 #include <QSerialPortInfo>
 #include <QByteArray>
 #include <QDataStream>
-
 #include <QDebug>
 #include "sensor.h"
 
@@ -28,6 +27,13 @@ int SerialConnection::getSensorCount() {
 	return SERIAL_ANALOG_SENSORS;
 }
 
+Sensor* SerialConnection::getSensor(int index) {
+	if (index >= SERIAL_ANALOG_SENSORS) {
+		return 0;
+	}
+	return sensors[index];
+}
+
 QList<Sensor*> SerialConnection::getSensors() {
 	QList<Sensor*> list;
 	for (int i = 0; i < SERIAL_ANALOG_SENSORS; i++) {
@@ -39,14 +45,15 @@ QList<Sensor*> SerialConnection::getSensors() {
 void SerialConnection::openConnection(const QString& portName) {
 
 	// Disconnect port if open
-	closeConnection();
+	if (port->isOpen()) {
+		closeConnection();
+	}
 
 	// Configure and open port
 	port->setPortName(portName);
 	port->setBaudRate(QSerialPort::Baud9600);
 	if (!port->open(QSerialPort::ReadWrite)) {
-		qDebug() << "NOK" << port->errorString();
-		return;
+		qDebug() << "Serial connection error:" << port->errorString();
 	}
 
 }

@@ -9,9 +9,8 @@
 #include <QFileDialog>
 #include <QDir>
 #include <QSettings>
-#include "jsonfileoutput.h"
 
-JsonFileSettingsWidget::JsonFileSettingsWidget(QWidget *parent) : OutputSettingsWidget(parent) {
+JsonFileSettingsWidget::JsonFileSettingsWidget(QWidget* parent) : OutputSettingsWidget(parent) {
 
 	_pathInput = new QLineEdit();
 	_pathInput->setText(QSettings().value("jsonfile/path", QDir::homePath()).toString());
@@ -53,11 +52,10 @@ bool JsonFileSettingsWidget::validateInput() {
 
 }
 
-SensorOutput* JsonFileSettingsWidget::getSensorOutput(int interval) {
-	JsonFileOutput* output = new JsonFileOutput();
-	output->setInterval(interval);
-	output->setPath(_pathInput->text());
-	return output;
+QVariantList JsonFileSettingsWidget::outputConfiguration() {
+	QVariantList config;
+	config << _pathInput->text();
+	return config;
 }
 
 void JsonFileSettingsWidget::storeCurrentSettings() const {

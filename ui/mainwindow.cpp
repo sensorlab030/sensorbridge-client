@@ -1,85 +1,125 @@
 #include "mainwindow.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QGridLayout>
+#include <QComboBox>
 #include <QPushButton>
 #include <QLabel>
+#include <QThread>
 #include <QDebug>
+#include <QSettings>
+#include <QSerialPortInfo>
 
-#include "serialconnection.h"
-#include "sensoroutput.h"
+#include "../core/bridgeengine.h"
+#include "../core/sensoroutput.h"
 #include "settingsdialog.h"
 #include "sensorwidget.h"
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
+MainWindow::MainWindow(BridgeEngine* engine, QWidget *parent) : QMainWindow(parent) {
 
-	// Setup serial connection
-	_serialConnection = new SerialConnection(this);
-	_sensors.append(_serialConnection->getSensors());
+	// Connect engine to interface
+	_engine = engine;
+	connect(_engine, &BridgeEngine::initialized, this, &MainWindow::initializeInterface, Qt::QueuedConnection);
+	connect(_engine, &BridgeEngine::outputChanged, this, &MainWindow::onOutputChanged, Qt::QueuedConnection);
+	connect(_engine, &BridgeEngine::outputActiveChanged, this, &MainWindow::onOutputActiveChanged, Qt::QueuedConnection);
+
+	// Call for engine initialization
+	QMetaObject::invokeMethod(engine, "initialize", Qt::QueuedConnection);
+
+}
+
+void MainWindow::initializeInterface() {
+
+	// Setup serial port selector
+	_serialPortSelector = new QComboBox();
+	_serialPortSelector->setMaximumWidth(150);
+	_serialPortSelector->addItem("None", "None");
+	for (QSerialPortInfo portInfo: QSerialPortInfo::availablePorts()) {
+		QString displayName = QString("%1 (%2)").arg(portInfo.portName()).arg(portInfo.description());
+		_serialPortSelector->addItem(displayName, portInfo.portName());
+	}
+	connect(_serialPortSelector, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &MainWindow::onSerialPortSelectorChanged);
+
+	// Select previously used serial port (if it is available)
+	int previousSerialIndex = _serialPortSelector->findData(QSettings().value("serial", "None"));
+	if (previousSerialIndex != -1) {
+		_serialPortSelector->setCurrentIndex(previousSerialIndex);
+	}
+
+	// Setup capture elements
+	_outputDescriptionLbl = new QLabel("No output configured");
 
 	QPushButton* btn = new QPushButton("Setup");
 	connect(btn, &QPushButton::clicked, this, &MainWindow::openSettings);
 
 	_startCaptureBtn = new QPushButton("Start capture");
-	connect(_startCaptureBtn, SIGNAL(clicked(bool)), this, SLOT(startCapture()));
+	_startCaptureBtn->setEnabled(false);
+	connect(_startCaptureBtn, &QPushButton::clicked, _engine, &BridgeEngine::startOutput);
 
 	_stopCaptureBtn = new QPushButton("Stop capture");
 	_stopCaptureBtn->hide();
-	connect(_stopCaptureBtn, SIGNAL(clicked(bool)), this, SLOT(stopCapture()));
+	connect(_stopCaptureBtn, &QPushButton::clicked, _engine, &BridgeEngine::stopOutput);
 
-	_outputDescriptionLbl = new QLabel();
+	// Setup sensor layout
+	QGridLayout* sensorLayout = new QGridLayout();
+	sensorLayout->setMargin(0);
+	sensorLayout->setContentsMargins(0, 0, 0,0);
+	sensorLayout->setSpacing(0);
 
-	// Setup capture layout
+	int index = 0;
+	for (Sensor* s: _engine->sensors()) {
+		SensorWidget* widget = new SensorWidget(s);
+		sensorLayout->addWidget(widget, index / 3, index % 3);
+		index++;
+	}
+
+	// Setup bottom layout
 	QHBoxLayout* captureLayout = new QHBoxLayout();
-	captureLayout->addWidget(_outputDescriptionLbl);
+	captureLayout->addWidget(new QLabel("Serial Port"));
+	captureLayout->addWidget(_serialPortSelector);
 	captureLayout->addStretch();
-	captureLayout->addWidget(btn);
 	captureLayout->addSpacing(40);
+	captureLayout->addWidget(new QLabel("Output:"));
+	captureLayout->addWidget(_outputDescriptionLbl);
+	captureLayout->addWidget(btn);
+	captureLayout->addSpacing(10);
 	captureLayout->addWidget(_startCaptureBtn);
 	captureLayout->addWidget(_stopCaptureBtn);
 
 	// Set central widget
 	QVBoxLayout* centralLayout = new QVBoxLayout();
-	centralLayout->addLayout(setupSensorsUI());
+	centralLayout->addLayout(sensorLayout);
 	centralLayout->addLayout(captureLayout, 0);
 	QWidget* centralWidget = new QWidget(this);
 	centralWidget->setLayout(centralLayout);
 	setCentralWidget(centralWidget);
 
-	connect(this, SIGNAL(outputChanged(SensorOutput*)), this, SLOT(onOutputChanged()));
-	onOutputChanged();
+	// Show window when UI is initialized
+	show();
+
 }
 
-QHBoxLayout* MainWindow::setupSensorsUI() {
-
-	QHBoxLayout* layout = new QHBoxLayout();
-	layout->setMargin(0);
-	layout->setContentsMargins(0, 0, 0,0);
-	layout->setSpacing(0);
-
-	for (Sensor* s: _sensors) {
-		SensorWidget* widget = new SensorWidget(s);
-		layout->addWidget(widget);
+void MainWindow::onSerialPortSelectorChanged() {
+	QString selectedData = _serialPortSelector->currentData().toString();
+	if (selectedData == "None") {
+		QMetaObject::invokeMethod(_engine, "stopSerialConnection", Qt::QueuedConnection);
+	} else {
+		QMetaObject::invokeMethod(_engine, "startSerialConnection", Qt::QueuedConnection, Q_ARG(QString, selectedData));
 	}
-
-	return layout;
+	QSettings().setValue("serial", selectedData);
 
 }
 
-void MainWindow::startCapture() {
-	_output->start();
-	_startCaptureBtn->hide();
-	_stopCaptureBtn->show();
+void MainWindow::onOutputActiveChanged(bool active) {
+	_startCaptureBtn->setVisible(!active);
+	_stopCaptureBtn->setVisible(active);
 }
 
-void MainWindow::stopCapture() {
-	_output->stop();
-	_startCaptureBtn->show();
-	_stopCaptureBtn->hide();
-}
+void MainWindow::onOutputChanged(SensorOutput* output) {
+	_startCaptureBtn->setEnabled(output != 0);
 
-void MainWindow::onOutputChanged() {
-	_startCaptureBtn->setEnabled((_output != 0));
-	_outputDescriptionLbl->setText((_output != 0) ? _output->description() : "No output configured");
+	QString outputDescription = (output != 0) ? output->description() : "No output configured";
+	_outputDescriptionLbl->setText(outputDescription);
 }
 
 void MainWindow::openSettings() {
@@ -87,26 +127,9 @@ void MainWindow::openSettings() {
 
 	if (dialog.exec() == QDialog::Accepted) {
 
-		// Setup serial
-		if (dialog.getSerialPort() != _serialConnection->portName()) {
-			_serialConnection->closeConnection();
-			_serialConnection->openConnection(dialog.getSerialPort());
-		}
-
-		// Setup output
-		if (_output != 0) {
-			delete _output;
-			_output = 0;
-		}
-
-		_output = dialog.getSensorOutput();
-		if (_output) {
-			_output->setParent(this);
-			for(Sensor* s: _sensors) {
-				_output->addSensor(s);
-			}
-		}
-		emit outputChanged(_output);
+		// Send output configuration to engine
+		QVariantList outputConfiguration = dialog.outputConfiguration();
+		QMetaObject::invokeMethod(_engine, "configureOutput", Qt::QueuedConnection, Q_ARG(QVariantList, outputConfiguration));
 
 	}
 

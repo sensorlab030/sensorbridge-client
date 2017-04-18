@@ -1,11 +1,50 @@
 #include "sensoroutput.h"
 #include "sensor.h"
+#include "websocketoutput.h"
+#include "csvfileoutput.h"
+#include "jsonfileoutput.h"
 
 #include <QDebug>
 
 SensorOutput::SensorOutput(QObject* parent) : QObject(parent) {
 	_timerId = 0;
 	_interval = 100;	// Set default interval to 100ms
+}
+
+SensorOutput* SensorOutput::createOutput(const QVariantList& configuration) {
+	QVariantList configurationCopy = configuration;
+
+	// Fetch shared values from config (values will be removed from config)
+	SensorOutput::Type type = (Type) (configurationCopy.takeFirst().toInt());
+	int interval = configurationCopy.takeFirst().toInt();
+
+	// Create output
+	SensorOutput* output = 0;
+	switch (type) {
+		case WebSocket: {
+			WebSocketOutput* websocket = new WebSocketOutput();
+			websocket->setPort(configurationCopy.takeFirst().toInt());
+			output = websocket;
+		} break;
+		case CsvFile: {
+			CsvFileOutput* csvFile= new CsvFileOutput();
+			csvFile->setPath(configurationCopy.takeFirst().toString());
+			output = csvFile;
+		} break;
+		case JsonFile: {
+
+			JsonFileOutput* jsonFile= new JsonFileOutput();
+			jsonFile->setPath(configurationCopy.takeFirst().toString());
+			output = jsonFile;
+		} break;
+	}
+
+	// Set interval
+	if (output) {
+		output->setInterval(interval);
+	}
+
+	return output;
 }
 
 void SensorOutput::addSensor(Sensor* sensor) {

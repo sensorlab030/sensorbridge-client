@@ -16,7 +16,15 @@ class SensorOutput : public QObject {
 	Q_OBJECT
 
 public:
+	enum Type {
+		WebSocket,
+		CsvFile,
+		JsonFile
+	};
+
 	explicit SensorOutput(QObject* parent = 0);	//!< Class constructor
+	static SensorOutput* createOutput(const QVariantList& configuration);	//!< Factory method
+
 	void addSensor(Sensor* sensor);				//!< Add sensor to output
 	void removeSensor(Sensor* sensor);			//!< Remove sensor from output
 	int interval() const;						//!< Returns the capture interval in ms

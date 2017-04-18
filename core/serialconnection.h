@@ -20,11 +20,12 @@ public:
 	explicit SerialConnection(QObject *parent = 0);		//!< Class constructor
 
 	static int getSensorCount();						//!< Get the sensor count
+	Sensor*			getSensor(int index);				//!< Get sensor
 	QList<Sensor*> getSensors();						//!< Get a list of sensors
 	QString portName() const;							//!< Returns the port name (e.g. COM10)
 
 public slots:
-	void openConnection(const QString &portName);		//!< Open the serial connection and read the serial data
+	void openConnection(const QString &portName);		//!< Open the serial connection and read the serial data. If port is already connected, it will be disconnected first
 	void closeConnection();								//!< Close the serial connection
 
 private slots:

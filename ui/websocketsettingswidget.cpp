@@ -6,9 +6,8 @@
 #include <QIntValidator>
 #include <QToolTip>
 #include <QSettings>
-#include "websocketoutput.h"
 
-WebSocketSettingsWidget::WebSocketSettingsWidget(QWidget *parent) : OutputSettingsWidget(parent) {
+WebSocketSettingsWidget::WebSocketSettingsWidget(QWidget *parent) : OutputSettingsWidget() {
 
 	_portInput = new QLineEdit();
 	_portInput->setValidator(new QIntValidator(1024, 32768));
@@ -38,11 +37,10 @@ bool WebSocketSettingsWidget::validateInput() {
 
 }
 
-SensorOutput* WebSocketSettingsWidget::getSensorOutput(int interval) {
-	WebSocketOutput* output = new WebSocketOutput();
-	output->setInterval(interval);
-	output->setPort(_portInput->text().toInt());
-	return output;
+QVariantList WebSocketSettingsWidget::outputConfiguration() {
+	QVariantList config;
+	config << _portInput->text().toInt();
+	return config;
 }
 
 void WebSocketSettingsWidget::storeCurrentSettings() const {

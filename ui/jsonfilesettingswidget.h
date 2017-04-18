@@ -13,7 +13,7 @@ public:
 	explicit JsonFileSettingsWidget(QWidget *parent = 0);
 
 	bool			validateInput();
-	SensorOutput*	getSensorOutput(int interval);
+	QVariantList	outputConfiguration();
 	void			storeCurrentSettings() const;
 
 private slots:

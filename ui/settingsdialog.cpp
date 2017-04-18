@@ -13,7 +13,7 @@
 #include <QSerialPortInfo>
 #include <QSettings>
 
-#include "sensoroutput.h"
+#include "../core/sensoroutput.h"
 #include "websocketsettingswidget.h"
 #include "csvfilesettingswidget.h"
 #include "jsonfilesettingswidget.h"
@@ -25,21 +25,11 @@ SettingsDialog::SettingsDialog(QWidget* parent) : QDialog(parent) {
 
 	QSettings settings;
 
-	// Serial port selection
-	_serialPortSelectionBox = new QComboBox(this);
-	for (QSerialPortInfo portInfo: QSerialPortInfo::availablePorts()) {
-		QString displayName = QString("%1 (%2)").arg(portInfo.portName()).arg(portInfo.description());
-		_serialPortSelectionBox->addItem(displayName, portInfo.portName());
-	}
-	if (int previousSerialIndex = _serialPortSelectionBox->findData(settings.value("serial", "")) != -1) {
-		_serialPortSelectionBox->setCurrentIndex(previousSerialIndex);
-	}
-
 	// Output type selection
 	_outputSelectionBox = new QComboBox(this);
-	_outputSelectionBox->addItem("Websocket");
-	_outputSelectionBox->addItem("CSV file");
-	_outputSelectionBox->addItem("JSON file");
+	_outputSelectionBox->addItem("Websocket", SensorOutput::WebSocket);
+	_outputSelectionBox->addItem("CSV file", SensorOutput::CsvFile);
+	_outputSelectionBox->addItem("JSON file", SensorOutput::JsonFile);
 	_outputSelectionBox->setCurrentIndex(settings.value("output-method", 0).toInt());
 
 	// Interval
@@ -49,25 +39,17 @@ SettingsDialog::SettingsDialog(QWidget* parent) : QDialog(parent) {
 	_intervalInput->setText(settings.value("interval", 100).toString());
 	_intervalInput->setToolTip("Capture interval (should be between 10 and 6,000 ms)");
 
-	if (int previousSerialIndex = _serialPortSelectionBox->findData(settings.value("serial", "")) != -1) {
-		_serialPortSelectionBox->setCurrentIndex(previousSerialIndex);
-	}
-
-	// Output widgets & interval
-	_webSocketSettings = new WebSocketSettingsWidget();
-	_csvFileSettings = new CsvFileSettingsWidget();
-	_jsonFileSettings = new JsonFileSettingsWidget();
-
 	// Accept button
 	QPushButton* acceptButton = new QPushButton("Ok");
 	connect(acceptButton, &QPushButton::clicked, this, &SettingsDialog::onAcceptClicked);
+
+	QPushButton* cancelButton = new QPushButton("Cancel");
+	connect(cancelButton, &QPushButton::clicked, this, &SettingsDialog::reject);
 
 	// Create form layout
 	QGridLayout* formLayout = new QGridLayout();
 	formLayout->setColumnMinimumWidth(0, 130);
 	formLayout->setColumnStretch(0, 0);
-	formLayout->addWidget(new QLabel("Serial port"), 0, 0);
-	formLayout->addWidget(_serialPortSelectionBox, 0, 1, 1, 1, Qt::AlignLeft);
 	formLayout->addWidget(new QLabel("Output"), 1, 0);
 	formLayout->addWidget(_outputSelectionBox, 1, 1, 1, 1, Qt::AlignLeft);
 	formLayout->addWidget(new QLabel("Capture inverval (ms)"), 2, 0);
@@ -75,22 +57,31 @@ SettingsDialog::SettingsDialog(QWidget* parent) : QDialog(parent) {
 
 	// Center layout
 	_settingsWidgetStack = new QStackedLayout();
-	_settingsWidgetStack->addWidget(_webSocketSettings);
-	_settingsWidgetStack->addWidget(_csvFileSettings);
-	_settingsWidgetStack->addWidget(_jsonFileSettings);
+	_settingsWidgetStack->addWidget(new WebSocketSettingsWidget());
+	_settingsWidgetStack->addWidget(new CsvFileSettingsWidget());
+	_settingsWidgetStack->addWidget(new JsonFileSettingsWidget());
 	connect(_outputSelectionBox, SIGNAL(activated(int)), _settingsWidgetStack, SLOT(setCurrentIndex(int)));
 	_settingsWidgetStack->setCurrentIndex(_outputSelectionBox->currentIndex());
 
 	// Bottom layout
 	QHBoxLayout* bottomLayout = new QHBoxLayout();
 	bottomLayout->addStretch();
+#ifdef Q_OS_WIN
 	bottomLayout->addWidget(acceptButton);
+	bottomLayout->addSpacing(10);
+	bottomLayout->addWidget(cancelButton);
+#else
+	bottomLayout->addWidget(cancelButton);
+	bottomLayout->addSpacing(10);
+	bottomLayout->addWidget(acceptButton);
+#endif
 
 	// Create main layout
 	QVBoxLayout* mainLayout = new QVBoxLayout();
 	mainLayout->addLayout(formLayout, 0);
 	mainLayout->addLayout(_settingsWidgetStack, 0);
 	mainLayout->addStretch();
+	mainLayout->addSpacing(20);
 	mainLayout->addLayout(bottomLayout);
 	setLayout(mainLayout);
 
@@ -117,7 +108,6 @@ void SettingsDialog::onAcceptClicked() {
 
 		// Save current settings
 		QSettings settings;
-		settings.setValue("serial", _serialPortSelectionBox->currentData().toString());
 		settings.setValue("interval", _intervalInput->text().toInt());
 		settings.setValue("output-method", _outputSelectionBox->currentIndex());
 
@@ -134,10 +124,10 @@ OutputSettingsWidget* SettingsDialog::currentOutputWidget() {
 	return (OutputSettingsWidget*) _settingsWidgetStack->currentWidget();
 }
 
-QString SettingsDialog::getSerialPort() {
-	return _serialPortSelectionBox->currentData().toString();
-}
-
-SensorOutput* SettingsDialog::getSensorOutput() {
-	return currentOutputWidget()->getSensorOutput(_intervalInput->text().toInt());
+QVariantList SettingsDialog::outputConfiguration() {
+	QVariantList config;
+	config << _outputSelectionBox->currentData().toInt();
+	config << _intervalInput->text().toInt();
+	config << currentOutputWidget()->outputConfiguration();
+	return config;
 }

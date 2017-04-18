@@ -3,35 +3,28 @@
 
 #include <QMainWindow>
 
+class QComboBox;
 class QPushButton;
 class QLabel;
-class QHBoxLayout;
-class Sensor;
-class SerialConnection;
+class BridgeEngine;
 class SensorOutput;
 
 class MainWindow : public QMainWindow {
 	Q_OBJECT
 
 public:
-	explicit MainWindow(QWidget *parent = 0);
-
-signals:
-	void outputChanged(SensorOutput* output);
+	explicit MainWindow(BridgeEngine* engine, QWidget *parent = 0);
 
 private slots:
-	void openSettings();
-	void startCapture();
-	void stopCapture();
-	void onOutputChanged();
+	void initializeInterface();					//!< Initialize the interface
+	void openSettings();						//!< Open output settings dialog
+	void onSerialPortSelectorChanged();			//!< Handle change in serial port
+	void onOutputActiveChanged(bool active);	//!< Handle change in output activity
+	void onOutputChanged(SensorOutput* output);	//!< Handle change in output
 
 private:
-	QHBoxLayout *setupSensorsUI();
-
-	QList<Sensor*>		_sensors;
-	SerialConnection*	_serialConnection;
-	SensorOutput*		_output = 0;
-
+	BridgeEngine*		_engine;
+	QComboBox*			_serialPortSelector;
 	QLabel*				_outputDescriptionLbl;
 	QPushButton*		_startCaptureBtn;
 	QPushButton*		_stopCaptureBtn;
