@@ -18,7 +18,8 @@ SOURCES += main.cpp \
     core/jsonfileoutput.cpp \
     ui/jsonfilesettingswidget.cpp \
     ui/uisensor.cpp \
-    core/bridgeengine.cpp
+    core/bridgeengine.cpp \
+    core/simplemovingaveragesmoothing.cpp
 
 # Default rules for deployment.
 include(deployment.pri)
@@ -39,7 +40,8 @@ HEADERS += \
     core/jsonfileoutput.h \
     ui/jsonfilesettingswidget.h \
     ui/uisensor.h \
-    core/bridgeengine.h
+    core/bridgeengine.h \
+    core/simplemovingaveragesmoothing.h
 
 DEFINES += SERIAL_ANALOG_SENSORS=6
 
