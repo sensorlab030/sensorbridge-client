@@ -19,7 +19,8 @@ SOURCES += main.cpp \
     ui/jsonfilesettingswidget.cpp \
     ui/uisensor.cpp \
     core/bridgeengine.cpp \
-    core/simplemovingaveragesmoothing.cpp
+    core/simplemovingaveragesmoothing.cpp \
+    core/sensoroutputformatter.cpp
 
 # Default rules for deployment.
 include(deployment.pri)
