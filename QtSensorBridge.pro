@@ -18,7 +18,8 @@ SOURCES += main.cpp \
     core/jsonfileoutput.cpp \
     ui/jsonfilesettingswidget.cpp \
     ui/uisensor.cpp \
-    core/bridgeengine.cpp
+    core/bridgeengine.cpp \
+    core/sensoroutputformatter.cpp
 
 # Default rules for deployment.
 include(deployment.pri)
