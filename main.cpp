@@ -2,7 +2,6 @@
 
 #include "core/bridgeengine.h"
 #include "ui/mainwindow.h"
-#include <QThread>
 
 int main(int argc, char *argv[]) {
 
@@ -19,7 +18,6 @@ int main(int argc, char *argv[]) {
 
 	// Construct and show mainwindow
 	MainWindow mainWindow(&engine);
-//	mainWindow.show();
 
 	return app.exec();
 
