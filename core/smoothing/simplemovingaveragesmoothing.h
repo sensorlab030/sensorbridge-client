@@ -4,10 +4,11 @@
 #include "smoothing.h"
 
 class SimpleMovingAverageSmoothing : public Smoothing {
-	Q_OBJECT
 
 public:
-	explicit SimpleMovingAverageSmoothing(QObject* parent = 0);
+	explicit SimpleMovingAverageSmoothing();
+
+	SmoothingType type() const;
 
 private:
 	float calculateSmoothedValue();

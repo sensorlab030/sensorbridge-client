@@ -1,6 +1,10 @@
 #include "exponentialsmoothing.h"
 
-ExponentialSmoothing::ExponentialSmoothing(QObject *parent) : Smoothing(parent) {}
+ExponentialSmoothing::ExponentialSmoothing() : Smoothing() {}
+
+Smoothing::SmoothingType ExponentialSmoothing::type() const {
+	return SingleExponential;
+}
 
 float ExponentialSmoothing::calculateSmoothedValue() {
 	float alpha = 1.0 - smoothingFactor();

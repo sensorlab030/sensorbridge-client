@@ -1,6 +1,10 @@
 #include "simplemovingaveragesmoothing.h"
 
-SimpleMovingAverageSmoothing::SimpleMovingAverageSmoothing(QObject *parent) : Smoothing(parent) {}
+SimpleMovingAverageSmoothing::SimpleMovingAverageSmoothing() : Smoothing() {}
+
+Smoothing::SmoothingType SimpleMovingAverageSmoothing::type() const {
+	return SimpleMovingAverage;
+}
 
 float SimpleMovingAverageSmoothing::calculateSmoothedValue() {
 

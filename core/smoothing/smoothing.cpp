@@ -1,6 +1,9 @@
 #include "smoothing.h"
+#include "nonesmoothing.h"
+#include "simplemovingaveragesmoothing.h"
+#include "exponentialsmoothing.h"
 
-Smoothing::Smoothing(QObject *parent) : QObject(parent) {
+Smoothing::Smoothing() {
 	_maxSampleCount = 10;
 	_smoothedValue = 0;
 	_smoothingFactor = 1;
@@ -10,7 +13,7 @@ float Smoothing::lastValue() const {
 	return _smoothedValue;
 }
 
-void Smoothing::pushValue(float value) {
+void Smoothing::addValue(float value) {
 
 	// Update value buffer
 	_samples.push_back(value);
@@ -20,7 +23,6 @@ void Smoothing::pushValue(float value) {
 
 	// Calculate new smoothed value and emit
 	_smoothedValue = calculateSmoothedValue();
-	emit valueAdded(_smoothedValue);
 
 }
 
@@ -31,6 +33,18 @@ float Smoothing::smoothingFactor() const {
 void Smoothing::setSmoothingFactor(float smoothingFactor) {
 	if (_smoothingFactor != smoothingFactor) {
 		_smoothingFactor = smoothingFactor;
-		emit smoothingFactorChanged(_smoothingFactor);
+	}
+}
+
+Smoothing* Smoothing::getSmoothing(SmoothingType type) {
+	switch (type) {
+		case None:
+			return new NoneSmoothing();
+		case SimpleMovingAverage:
+			return new SimpleMovingAverageSmoothing();
+		case SingleExponential:
+			return new ExponentialSmoothing();
+		default:
+			return 0;
 	}
 }

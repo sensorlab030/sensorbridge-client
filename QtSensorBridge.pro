@@ -24,7 +24,8 @@ SOURCES += main.cpp \
     core/sensoroutputformatter.cpp \
     core/smoothing/simplemovingaveragesmoothing.cpp \
     core/smoothing/exponentialsmoothing.cpp \
-    core/smoothing/smoothing.cpp
+    core/smoothing/smoothing.cpp \
+    core/smoothing/nonesmoothing.cpp
 
 # Default rules for deployment.
 include(deployment.pri)
@@ -48,7 +49,8 @@ HEADERS += \
     core/bridgeengine.h \
     core/smoothing/simplemovingaveragesmoothing.h \
     core/smoothing/exponentialsmoothing.h \
-    core/smoothing/smoothing.h
+    core/smoothing/smoothing.h \
+    core/smoothing/nonesmoothing.h
 
 DEFINES += SERIAL_ANALOG_SENSORS=6
 

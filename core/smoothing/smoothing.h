@@ -1,25 +1,26 @@
 #ifndef SMOOTHING_H
 #define SMOOTHING_H
 
-#include <QObject>
 #include <QVector>
 
-class Smoothing : public QObject {
-	Q_OBJECT
+class Smoothing {
 
 public:
-	explicit Smoothing(QObject *parent = 0);
+	explicit Smoothing();
 
-	float lastValue() const;			//!< Get last calculated value
-	float smoothingFactor() const;		//!< Get smoothing factor [0.0, 1.0]
+	enum SmoothingType {
+		None,
+		SimpleMovingAverage,
+		SingleExponential
+	};
 
-signals:
-	void valueAdded(float value);
-	void smoothingFactorChanged(float smoothingFacor);
-
-public slots:
-	void pushValue(float value);					//!< Add new value
+	virtual SmoothingType type() const = 0;
+	float lastValue() const;						//!< Get last calculated value
+	float smoothingFactor() const;					//!< Get smoothing factor [0.0, 1.0]
+	void addValue(float value);						//!< Add new value
 	void setSmoothingFactor(float smoothingFactor);	//!< Set smoothing factor [0.0, 1.0]
+
+	static Smoothing* getSmoothing(SmoothingType type);
 
 protected:
 	virtual float calculateSmoothedValue() = 0;

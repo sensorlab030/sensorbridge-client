@@ -4,10 +4,11 @@
 #include "smoothing.h"
 
 class ExponentialSmoothing : public Smoothing {
-	Q_OBJECT
 
 public:
-	explicit ExponentialSmoothing(QObject *parent = 0);
+	explicit ExponentialSmoothing();
+
+	SmoothingType type() const;
 
 private:
 	float calculateSmoothedValue();
