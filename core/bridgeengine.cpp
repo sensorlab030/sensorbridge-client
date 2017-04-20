@@ -8,6 +8,7 @@
 #include "serialconnection.h"
 
 BridgeEngine::BridgeEngine(QObject *parent) : QObject(parent) {
+	_output = 0;
 
 	// Move to separate thread
 	QThread* newThread = new QThread();

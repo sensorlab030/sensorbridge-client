@@ -52,7 +52,7 @@ bool JsonFileSettingsWidget::validateInput() {
 
 }
 
-QVariantList JsonFileSettingsWidget::outputConfiguration() {
+QVariantList JsonFileSettingsWidget::outputConfiguration() const {
 	QVariantList config;
 	config << _pathInput->text();
 	return config;

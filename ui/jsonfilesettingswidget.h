@@ -13,7 +13,7 @@ public:
 	explicit JsonFileSettingsWidget(QWidget *parent = 0);
 
 	bool			validateInput();
-	QVariantList	outputConfiguration();
+	QVariantList	outputConfiguration() const;
 	void			storeCurrentSettings() const;
 
 private slots:

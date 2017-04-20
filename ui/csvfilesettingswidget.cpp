@@ -52,7 +52,7 @@ bool CsvFileSettingsWidget::validateInput() {
 
 }
 
-QVariantList CsvFileSettingsWidget::outputConfiguration() {
+QVariantList CsvFileSettingsWidget::outputConfiguration() const {
 	QVariantList config;
 	config << _pathInput->text();
 	return config;

@@ -128,7 +128,7 @@ void MainWindow::openSettings() {
 	if (dialog.exec() == QDialog::Accepted) {
 
 		// Send output configuration to engine
-		QVariantList outputConfiguration = dialog.outputConfiguration();
+		QVariantList outputConfiguration (dialog.outputConfiguration());
 		QMetaObject::invokeMethod(_engine, "configureOutput", Qt::QueuedConnection, Q_ARG(QVariantList, outputConfiguration));
 
 	}

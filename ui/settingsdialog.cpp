@@ -33,33 +33,33 @@ SettingsDialog::SettingsDialog(QWidget* parent) : QDialog(parent) {
 	_outputSelectionBox->setCurrentIndex(settings.value("output-method", 0).toInt());
 
 	// Interval
-	_intervalInput = new QLineEdit();
+	_intervalInput = new QLineEdit(this);
 	_intervalInput->setMaximumWidth(100);
 	_intervalInput->setValidator(new QIntValidator(10, 6000));
 	_intervalInput->setText(settings.value("interval", 100).toString());
 	_intervalInput->setToolTip("Capture interval (should be between 10 and 6,000 ms)");
 
 	// Accept button
-	QPushButton* acceptButton = new QPushButton("Ok");
+	QPushButton* acceptButton = new QPushButton("Ok", this);
 	connect(acceptButton, &QPushButton::clicked, this, &SettingsDialog::onAcceptClicked);
 
-	QPushButton* cancelButton = new QPushButton("Cancel");
+	QPushButton* cancelButton = new QPushButton("Cancel", this);
 	connect(cancelButton, &QPushButton::clicked, this, &SettingsDialog::reject);
 
 	// Create form layout
 	QGridLayout* formLayout = new QGridLayout();
 	formLayout->setColumnMinimumWidth(0, 130);
 	formLayout->setColumnStretch(0, 0);
-	formLayout->addWidget(new QLabel("Output"), 1, 0);
+	formLayout->addWidget(new QLabel("Output", this), 1, 0);
 	formLayout->addWidget(_outputSelectionBox, 1, 1, 1, 1, Qt::AlignLeft);
-	formLayout->addWidget(new QLabel("Capture inverval (ms)"), 2, 0);
+	formLayout->addWidget(new QLabel("Capture inverval (ms)", this), 2, 0);
 	formLayout->addWidget(_intervalInput, 2, 1, 1, 1, Qt::AlignLeft);
 
 	// Center layout
 	_settingsWidgetStack = new QStackedLayout();
-	_settingsWidgetStack->addWidget(new WebSocketSettingsWidget());
-	_settingsWidgetStack->addWidget(new CsvFileSettingsWidget());
-	_settingsWidgetStack->addWidget(new JsonFileSettingsWidget());
+	_settingsWidgetStack->addWidget(new WebSocketSettingsWidget(this));
+	_settingsWidgetStack->addWidget(new CsvFileSettingsWidget(this));
+	_settingsWidgetStack->addWidget(new JsonFileSettingsWidget(this));
 	connect(_outputSelectionBox, SIGNAL(activated(int)), _settingsWidgetStack, SLOT(setCurrentIndex(int)));
 	_settingsWidgetStack->setCurrentIndex(_outputSelectionBox->currentIndex());
 
@@ -124,10 +124,21 @@ OutputSettingsWidget* SettingsDialog::currentOutputWidget() {
 	return (OutputSettingsWidget*) _settingsWidgetStack->currentWidget();
 }
 
-QVariantList SettingsDialog::outputConfiguration() {
+const OutputSettingsWidget* SettingsDialog::currentOutputWidget() const {
+	return (OutputSettingsWidget*) _settingsWidgetStack->currentWidget();
+}
+
+QVariantList SettingsDialog::outputConfiguration() const {
+
+	// Add general settings
 	QVariantList config;
 	config << _outputSelectionBox->currentData().toInt();
 	config << _intervalInput->text().toInt();
-	config << currentOutputWidget()->outputConfiguration();
+
+	// Add output specific settings
+	const OutputSettingsWidget* settingsWidget = currentOutputWidget();
+	config << settingsWidget->outputConfiguration();
+
 	return config;
+
 }

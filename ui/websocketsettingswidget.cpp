@@ -7,7 +7,7 @@
 #include <QToolTip>
 #include <QSettings>
 
-WebSocketSettingsWidget::WebSocketSettingsWidget(QWidget *parent) : OutputSettingsWidget() {
+WebSocketSettingsWidget::WebSocketSettingsWidget(QWidget *parent) : OutputSettingsWidget(parent) {
 
 	_portInput = new QLineEdit();
 	_portInput->setValidator(new QIntValidator(1024, 32768));
@@ -37,7 +37,7 @@ bool WebSocketSettingsWidget::validateInput() {
 
 }
 
-QVariantList WebSocketSettingsWidget::outputConfiguration() {
+QVariantList WebSocketSettingsWidget::outputConfiguration() const {
 	QVariantList config;
 	config << _portInput->text().toInt();
 	return config;

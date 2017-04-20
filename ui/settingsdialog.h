@@ -17,13 +17,14 @@ class SettingsDialog : public QDialog {
 public:
 	SettingsDialog(QWidget* parent = 0);
 
-	QVariantList					outputConfiguration();
+	QVariantList					outputConfiguration() const;
 
 private slots:
 	void onAcceptClicked();
 
 private:
 	OutputSettingsWidget*			currentOutputWidget();
+	const OutputSettingsWidget*		currentOutputWidget() const;
 
 	QComboBox*						_outputSelectionBox;
 	QLineEdit*						_intervalInput;
