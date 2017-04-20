@@ -49,8 +49,8 @@ void MainWindow::initializeInterface() {
 	// Setup capture elements
 	_outputDescriptionLbl = new QLabel("No output configured");
 
-	QPushButton* btn = new QPushButton("Setup");
-	connect(btn, &QPushButton::clicked, this, &MainWindow::openSettings);
+	_setupBbtn = new QPushButton("Setup");
+	connect(_setupBbtn, &QPushButton::clicked, this, &MainWindow::openSettings);
 
 	_startCaptureBtn = new QPushButton("Start capture");
 	_startCaptureBtn->setEnabled(false);
@@ -81,7 +81,7 @@ void MainWindow::initializeInterface() {
 	captureLayout->addSpacing(40);
 	captureLayout->addWidget(new QLabel("Output:"));
 	captureLayout->addWidget(_outputDescriptionLbl);
-	captureLayout->addWidget(btn);
+	captureLayout->addWidget(_setupBbtn);
 	captureLayout->addSpacing(10);
 	captureLayout->addWidget(_startCaptureBtn);
 	captureLayout->addWidget(_stopCaptureBtn);
@@ -113,6 +113,7 @@ void MainWindow::onSerialPortSelectorChanged() {
 void MainWindow::onOutputActiveChanged(bool active) {
 	_startCaptureBtn->setVisible(!active);
 	_stopCaptureBtn->setVisible(active);
+	_setupBbtn->setEnabled(!active);
 }
 
 void MainWindow::onOutputChanged(SensorOutput* output) {
@@ -128,7 +129,7 @@ void MainWindow::openSettings() {
 	if (dialog.exec() == QDialog::Accepted) {
 
 		// Send output configuration to engine
-		QVariantList outputConfiguration = dialog.outputConfiguration();
+		QVariantList outputConfiguration (dialog.outputConfiguration());
 		QMetaObject::invokeMethod(_engine, "configureOutput", Qt::QueuedConnection, Q_ARG(QVariantList, outputConfiguration));
 
 	}

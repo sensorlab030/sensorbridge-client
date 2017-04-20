@@ -3,6 +3,8 @@ TEMPLATE = app
 QT += widgets serialport websockets charts
 CONFIG += c++11
 
+TARGET=SensorBridge
+
 SOURCES += main.cpp \
     core/sensor.cpp \
     core/serialconnection.cpp \

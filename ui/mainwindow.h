@@ -26,6 +26,7 @@ private:
 	BridgeEngine*		_engine;
 	QComboBox*			_serialPortSelector;
 	QLabel*				_outputDescriptionLbl;
+	QPushButton*		_setupBbtn;
 	QPushButton*		_startCaptureBtn;
 	QPushButton*		_stopCaptureBtn;
 
