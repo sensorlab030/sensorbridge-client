@@ -46,3 +46,5 @@ HEADERS += \
 
 DEFINES += SERIAL_ANALOG_SENSORS=6
 
+RC_ICONS = icon.ico
+
