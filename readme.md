@@ -5,7 +5,7 @@ This is the client that connects to the
 collects data via the serial port from the sensors connected to the board and 
 allows the data to be recorded to CSV or JSON files, or served via websockets.
 
-The application is written in C++ using the Qt 5.8
+The application is written in C++ using the Qt 5.8.0
 
 ## Protocol
 
