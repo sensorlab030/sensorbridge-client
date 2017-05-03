@@ -4,7 +4,7 @@
 #include "exponentialsmoothing.h"
 
 Smoothing::Smoothing() {
-	_maxSampleCount = 10;
+	_maxSampleCount = 50;
 	_smoothedValue = 0;
 	_smoothingFactor = 1;
 }
