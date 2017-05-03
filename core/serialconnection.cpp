@@ -85,7 +85,14 @@ void SerialConnection::readData() {
 		for (int i = 0; i < SERIAL_ANALOG_SENSORS; i++) {
 			quint16 value;
 			dataStream >> value;
-			sensors[i]->pushValue((float) value / 1023.0);
+
+			if (value <= 1023) {
+				sensors[i]->setIsConnected(true);
+				sensors[i]->pushValue((float) value / 1023.0);
+			} else {
+				sensors[i]->setIsConnected(false);
+			}
+
 		}
 
 	}

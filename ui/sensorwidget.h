@@ -26,9 +26,12 @@ private slots:
 	void onSmoothingFactorChanged(float value);
 	void onSmoothingSelectorChanged(int);
 	void onSmoothingTypeChanged(Smoothing::SmoothingType type);
+	void onSensorIsConnectedChanged(bool isConnected);
 
 private:
 	void timerEvent(QTimerEvent*);
+
+	QChart*			chart;
 
 	QComboBox*		_smoothingSelector;
 	QSlider*		_smoothingSlider;

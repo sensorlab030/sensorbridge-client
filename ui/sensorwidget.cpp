@@ -15,6 +15,7 @@ SensorWidget::SensorWidget(Sensor* sensor, QWidget *parent) : QWidget(parent) {
 	_sensor = sensor;
 	connect(_sensor, &Sensor::lastValueChanged, this, &SensorWidget::onNewValue, Qt::QueuedConnection);
 	connect(sensor, &Sensor::lastRawValueChanged, this, &SensorWidget::onNewRawValue, Qt::QueuedConnection);
+	connect(sensor, &Sensor::isConnectedChanged, this, &SensorWidget::onSensorIsConnectedChanged, Qt::QueuedConnection);
 
 	// Setup data series
 	_dataSeries = new QLineSeries();
@@ -43,7 +44,7 @@ SensorWidget::SensorWidget(Sensor* sensor, QWidget *parent) : QWidget(parent) {
 	connect(_sensor, &Sensor::smoothingTypeChanged, this, &SensorWidget::onSmoothingTypeChanged);
 	onSmoothingTypeChanged(_sensor->smoothingType());
 
-	QChart *chart = new QChart();
+	chart = new QChart();
 	chart->legend()->hide();
 	chart->setBackgroundRoundness(0);
 	chart->addSeries(_rawDataSeries);
@@ -57,7 +58,6 @@ SensorWidget::SensorWidget(Sensor* sensor, QWidget *parent) : QWidget(parent) {
 
 	_rawDataSeries->setColor(QColor(100, 100, 100));
 	_dataSeries->setColor(Qt::cyan);
-
 
 	QChartView *chartView = new QChartView(chart);
 	chartView->setRenderHint(QPainter::Antialiasing);
@@ -132,4 +132,8 @@ void SensorWidget::onSmoothingTypeChanged(Smoothing::SmoothingType type) {
 	if (index != -1) {
 		_smoothingSelector->setCurrentIndex(index);
 	}
+}
+
+void SensorWidget::onSensorIsConnectedChanged(bool isConnected) {
+	_dataSeries->setVisible(isConnected);
 }

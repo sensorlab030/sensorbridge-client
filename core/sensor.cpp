@@ -5,6 +5,7 @@
 
 Sensor::Sensor(QObject* parent) : QObject(parent) {
 	_lastValue = 0;
+	_isConnected = false;
 	_smoothing = Smoothing::getSmoothing(Smoothing::None);
 	_smoothing->setSmoothingFactor(0);
 }
@@ -26,6 +27,17 @@ void Sensor::pushValue(float value) {
 	emit lastValueChanged(_smoothing->lastValue());
 	emit lastRawValueChanged(_lastValue);
 
+}
+
+void Sensor::setIsConnected(bool isConnected) {
+	if (_isConnected != isConnected) {
+		_isConnected = isConnected;
+		emit isConnectedChanged(_isConnected);
+	}
+}
+
+bool Sensor::isConnected() const {
+	return _isConnected;
 }
 
 void Sensor::setName(const QString &name) {

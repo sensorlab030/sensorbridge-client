@@ -15,9 +15,13 @@ class Sensor : public QObject {
 public:
 	Sensor(QObject* parent = 0);
 
+
 	void pushValue(float value);				//!< Push new value to the sensor
 	float lastValue() const;					//!< Get the latest (smoothed) value
 	float lastRawValue() const;					//!< Get the latest raw value
+
+	void setIsConnected(bool isConnected);		//!< Set sensor as connected or disconnected
+	bool isConnected() const;					//!< Get sensor connection status
 
 	void setName (const QString& name);			//!< Set the sensor name
 	QString name() const;						//!< Get the sensor name
@@ -29,13 +33,14 @@ public:
 	float smoothingFactor() const;
 
 signals:
+	void isConnectedChanged(bool isConnected);
 	void lastValueChanged(float value);
 	void lastRawValueChanged(float value);
-//	void valueAdded(float value);
 	void smoothingTypeChanged(Smoothing::SmoothingType type);
 	void smoothingFactorChanged(float smoothingFactor);
 
 private:
+	bool				_isConnected;			//!< Sensor connection status
 	float				_lastValue;				//!< The last value
 	QString				_name;					//!< The sensor name
 	Smoothing*			_smoothing;				//!< Smoother
