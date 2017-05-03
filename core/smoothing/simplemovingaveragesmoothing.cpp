@@ -12,6 +12,9 @@ float SimpleMovingAverageSmoothing::calculateSmoothedValue() {
 	// results in a bigger used buffer, e.g. more history being
 	// used)
 	int startIndex = (1 - smoothingFactor()) * _samples.count();
+	if (startIndex >= _samples.count() -2) {
+		startIndex = _samples.count() -2;
+	}
 
 	// Get sum of selected set
 	float sum = 0;
@@ -20,6 +23,10 @@ float SimpleMovingAverageSmoothing::calculateSmoothedValue() {
 	}
 
 	// Return simple average
-	return sum / (float) (_samples.size() - startIndex);
+	if (sum == 0) {
+		return 0;
+	} else {
+		return sum / (float) (_samples.size() - startIndex);
+	}
 
 }

@@ -19,6 +19,7 @@ public:
 
 private slots:
 	void onNewValue(float value);
+	void onNewRawValue(float value);
 	void updateDataSeries();
 
 	void onSliderValueChanged(int value);
@@ -32,7 +33,9 @@ private:
 	QComboBox*		_smoothingSelector;
 	QSlider*		_smoothingSlider;
 	QLineSeries*	_dataSeries;
+	QLineSeries*	_rawDataSeries;
 	QVector<float>	_data;
+	QVector<float>	_rawData;
 	Sensor*			_sensor;
 
 };
