@@ -10,6 +10,8 @@
 #include <QStackedWidget>
 #include <QDebug>
 
+#include <math.h>
+
 #include "../core/sensor.h"
 
 SensorWidget::SensorWidget(Sensor* sensor, QWidget *parent) : QWidget(parent) {
