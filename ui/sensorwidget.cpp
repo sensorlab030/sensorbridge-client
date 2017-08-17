@@ -7,6 +7,7 @@
 #include <QSlider>
 #include <QChart>
 #include <QChartView>
+#include <QStackedWidget>
 #include <QDebug>
 
 #include "../core/sensor.h"
@@ -44,7 +45,7 @@ SensorWidget::SensorWidget(Sensor* sensor, QWidget *parent) : QWidget(parent) {
 	connect(_sensor, &Sensor::smoothingTypeChanged, this, &SensorWidget::onSmoothingTypeChanged);
 	onSmoothingTypeChanged(_sensor->smoothingType());
 
-	chart = new QChart();
+	QChart* chart = new QChart();
 	chart->legend()->hide();
 	chart->setBackgroundRoundness(0);
 	chart->addSeries(_rawDataSeries);
@@ -70,7 +71,16 @@ SensorWidget::SensorWidget(Sensor* sensor, QWidget *parent) : QWidget(parent) {
 	QVBoxLayout* layout = new QVBoxLayout();
 	layout->addWidget(chartView);
 	layout->addLayout(smoothingLayout);
-	setLayout(layout);
+	QWidget* sensorWidget = new QWidget();
+	sensorWidget->setLayout(layout);
+
+	_widgetStack = new QStackedWidget();
+	_widgetStack->addWidget(new QLabel("No sensor connected"));
+	_widgetStack->addWidget(sensorWidget);
+
+	QHBoxLayout* mainLayout = new QHBoxLayout();
+	mainLayout->addWidget(_widgetStack);
+	setLayout(mainLayout);
 
 	startTimer(100);
 
@@ -135,5 +145,5 @@ void SensorWidget::onSmoothingTypeChanged(Smoothing::SmoothingType type) {
 }
 
 void SensorWidget::onSensorIsConnectedChanged(bool isConnected) {
-	_dataSeries->setVisible(isConnected);
+	_widgetStack->setCurrentIndex(isConnected ? 1 : 0);
 }

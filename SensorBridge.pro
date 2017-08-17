@@ -52,7 +52,7 @@ HEADERS += \
     core/smoothing/smoothing.h \
     core/smoothing/nonesmoothing.h
 
-DEFINES += SERIAL_ANALOG_SENSORS=6
+DEFINES += SERIAL_ANALOG_SENSORS=3
 
 RC_ICONS = icon.ico
 ICON = icon.icns

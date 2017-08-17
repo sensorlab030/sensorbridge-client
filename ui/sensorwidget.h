@@ -8,6 +8,7 @@
 class Sensor;
 class QComboBox;
 class QSlider;
+class QStackedWidget;
 
 using namespace QtCharts;
 
@@ -31,8 +32,7 @@ private slots:
 private:
 	void timerEvent(QTimerEvent*);
 
-	QChart*			chart;
-
+	QStackedWidget*	_widgetStack;
 	QComboBox*		_smoothingSelector;
 	QSlider*		_smoothingSlider;
 	QLineSeries*	_dataSeries;
