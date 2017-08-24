@@ -1,5 +1,6 @@
 #include "sensoroutputformatter.h"
 #include <QDateTime>
+#include "sensor.h"
 
 /*!
  * Format given data list as a JSON object in a QString
@@ -8,7 +9,7 @@ QString SensorOutputFormatter::formatAsJson(const QList<float>& data) {
 
 	QString json = "{";
 	for (int i = 0; i < data.count(); i++) {
-		json.append(QString("\"sensor_%1\": %2").arg(QString::number(i), QString::number(data.at(i))));
+		json.append(QString("\"%1\": %2").arg(Sensor::variableName(i + 1), QString::number(data.at(i))));
 		if (i < data.count() -1) {
 			json.append(",");
 		}
@@ -27,7 +28,7 @@ QString SensorOutputFormatter::csvFormatHeader() {
 	line.append("timestamp");
 	line.append(csvFieldSeparator);
 	for (int i = 0; i < SERIAL_ANALOG_SENSORS; i++) {
-		line.append(QString("SERIAL_%1").arg(QString::number(i)));
+		line.append(Sensor::variableName(i + 1));
 		line.append((i < SERIAL_ANALOG_SENSORS-1) ? csvFieldSeparator : csvLineSeparator);
 	}
 	return line;

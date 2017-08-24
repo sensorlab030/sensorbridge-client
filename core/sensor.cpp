@@ -3,7 +3,8 @@
 
 #include <QDebug>
 
-Sensor::Sensor(QObject* parent) : QObject(parent) {
+Sensor::Sensor(int id, QObject* parent) : QObject(parent) {
+	_id = id;
 	_lastValue = 0;
 	_isConnected = false;
 	_smoothing = Smoothing::getSmoothing(Smoothing::None);
@@ -40,12 +41,20 @@ bool Sensor::isConnected() const {
 	return _isConnected;
 }
 
-void Sensor::setName(const QString &name) {
-	this->_name =name;
+int Sensor::id() const {
+	return _id;
 }
 
 QString Sensor::name() const {
-	return _name;
+	return QString("Sensor %1").arg(QString::number(_id));
+}
+
+QString Sensor::variableName() const {
+	return variableName(_id);
+}
+
+QString Sensor::variableName(int id) {
+	return  QString("sensor_%1").arg(QString::number(id));
 }
 
 void Sensor::setSmootingType(Smoothing::SmoothingType type) {

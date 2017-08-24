@@ -13,8 +13,7 @@ class Sensor : public QObject {
 	Q_OBJECT
 
 public:
-	Sensor(QObject* parent = 0);
-
+	Sensor(int id, QObject* parent = 0);
 
 	void pushValue(float value);				//!< Push new value to the sensor
 	float lastValue() const;					//!< Get the latest (smoothed) value
@@ -23,8 +22,12 @@ public:
 	void setIsConnected(bool isConnected);		//!< Set sensor as connected or disconnected
 	bool isConnected() const;					//!< Get sensor connection status
 
-	void setName (const QString& name);			//!< Set the sensor name
-	QString name() const;						//!< Get the sensor name
+	void setId(int id);							//!< Set the sensor id
+	int id() const;								//!< Get the sensor id
+
+	QString name() const;						//!< Get the sensor display name (e.g. "Sensor 1")
+	QString variableName() const;				//!< Get the sensor variable name (e.g. "sensor_1")
+	static QString variableName(int id);		//!< Get the sensor variable name for given id (e.g. "sensor_1")
 
 	void						setSmootingType(Smoothing::SmoothingType type);
 	Smoothing::SmoothingType	smoothingType();
@@ -42,6 +45,7 @@ signals:
 private:
 	bool				_isConnected;			//!< Sensor connection status
 	float				_lastValue;				//!< The last value
+	int					_id;					//!< The sensor id (1-indexed)
 	QString				_name;					//!< The sensor name
 	Smoothing*			_smoothing;				//!< Smoother
 
