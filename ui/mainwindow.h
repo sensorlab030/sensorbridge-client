@@ -22,6 +22,8 @@ private slots:
 	void onOutputActiveChanged(bool active);	//!< Handle change in output activity
 	void onOutputChanged(SensorOutput* output);	//!< Handle change in output
 
+	void repopulateSerialPorts();
+
 private:
 	BridgeEngine*		_engine;
 	QComboBox*			_serialPortSelector;

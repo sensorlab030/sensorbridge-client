@@ -33,12 +33,12 @@ void MainWindow::initializeInterface() {
 	// Setup serial port selector
 	_serialPortSelector = new QComboBox();
 	_serialPortSelector->setMaximumWidth(150);
-	_serialPortSelector->addItem("None", "None");
-	for (QSerialPortInfo portInfo: QSerialPortInfo::availablePorts()) {
-		QString displayName = QString("%1 (%2)").arg(portInfo.portName()).arg(portInfo.description());
-		_serialPortSelector->addItem(displayName, portInfo.portName());
-	}
 	connect(_serialPortSelector, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &MainWindow::onSerialPortSelectorChanged);
+	repopulateSerialPorts();
+
+	QPushButton* rescanButton = new QPushButton("Rescan");
+	connect(rescanButton, &QPushButton::clicked, this, &MainWindow::repopulateSerialPorts);
+
 
 	// Select previously used serial port (if it is available)
 	int previousSerialIndex = _serialPortSelector->findData(QSettings().value("serial", "None"));
@@ -77,6 +77,7 @@ void MainWindow::initializeInterface() {
 	QHBoxLayout* captureLayout = new QHBoxLayout();
 	captureLayout->addWidget(new QLabel("Serial Port"));
 	captureLayout->addWidget(_serialPortSelector);
+	captureLayout->addWidget(rescanButton);
 	captureLayout->addStretch();
 	captureLayout->addSpacing(40);
 	captureLayout->addWidget(new QLabel("Output:"));
@@ -96,6 +97,30 @@ void MainWindow::initializeInterface() {
 
 	// Show window when UI is initialized
 	show();
+
+}
+
+void MainWindow::repopulateSerialPorts() {
+
+	// Temporarily disconnect change signal from combobox
+	disconnect(_serialPortSelector, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &MainWindow::onSerialPortSelectorChanged);
+
+	// Disconnect
+	_engine->stopSerialConnection();
+
+
+	// Remove all current entries
+	_serialPortSelector->clear();
+
+	// Add new entries
+	_serialPortSelector->addItem("None", "None");
+	for (QSerialPortInfo portInfo: QSerialPortInfo::availablePorts()) {
+		QString displayName = QString("%1 (%2)").arg(portInfo.portName()).arg(portInfo.description());
+		_serialPortSelector->addItem(displayName, portInfo.portName());
+	}
+
+	// Reconnect change signal from combobox
+	connect(_serialPortSelector, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &MainWindow::onSerialPortSelectorChanged);
 
 }
 
