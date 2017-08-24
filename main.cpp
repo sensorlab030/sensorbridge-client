@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
 	app.setApplicationDisplayName("Sensor Bridge");
 	app.setOrganizationName("CLEVER°FRANKE");
 	app.setOrganizationDomain("com.cleverfranke");
-	app.setApplicationVersion("1.1.0");
+	app.setApplicationVersion("1.1.1");
 
 	// Construct engine (initialization is done by mainwindow)
 	BridgeEngine engine;
