@@ -60,6 +60,10 @@ void SerialConnection::openConnection(const QString& portName) {
 void SerialConnection::closeConnection() {
 	if (port->isOpen()) {
 		port->close();
+
+		for (int i = 0; i < SERIAL_ANALOG_SENSORS; i++) {
+			sensors[i]->setIsConnected(false);
+		}
 	}
 }
 
