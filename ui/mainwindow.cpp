@@ -108,7 +108,6 @@ void MainWindow::repopulateSerialPorts() {
 	// Disconnect
 	_engine->stopSerialConnection();
 
-
 	// Remove all current entries
 	_serialPortSelector->clear();
 

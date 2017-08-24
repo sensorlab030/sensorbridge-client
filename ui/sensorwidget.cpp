@@ -76,8 +76,11 @@ SensorWidget::SensorWidget(Sensor* sensor, QWidget *parent) : QWidget(parent) {
 	QWidget* sensorWidget = new QWidget();
 	sensorWidget->setLayout(layout);
 
+	QLabel* noSensorLabel = new QLabel(QString("%1: No sensor connected").arg(sensor->name()));
+	noSensorLabel->setStyleSheet("QLabel { background-color: qlineargradient(spread:pad, x1:0 y1:0, x2:0 y2:1, stop:0 rgba(46, 48, 58, 255), stop:1 rgba(18, 18, 24, 255)); color : white; qproperty-alignment: AlignCenter; }");
+
 	_widgetStack = new QStackedWidget();
-	_widgetStack->addWidget(new QLabel("No sensor connected"));
+	_widgetStack->addWidget(noSensorLabel);
 	_widgetStack->addWidget(sensorWidget);
 
 	QHBoxLayout* mainLayout = new QHBoxLayout();
