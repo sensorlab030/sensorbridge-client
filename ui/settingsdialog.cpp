@@ -27,7 +27,7 @@ SettingsDialog::SettingsDialog(QWidget* parent) : QDialog(parent) {
 
 	// Output type selection
 	_outputSelectionBox = new QComboBox(this);
-	_outputSelectionBox->addItem("Websocket", SensorOutput::WebSocket);
+	_outputSelectionBox->addItem("WebSocket", SensorOutput::WebSocket);
 	_outputSelectionBox->addItem("CSV file", SensorOutput::CsvFile);
 	_outputSelectionBox->addItem("JSON file", SensorOutput::JsonFile);
 	_outputSelectionBox->setCurrentIndex(settings.value("output-method", 0).toInt());

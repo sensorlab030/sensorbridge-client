@@ -13,7 +13,7 @@ WebSocketSettingsWidget::WebSocketSettingsWidget(QWidget *parent) : OutputSettin
 	_portInput->setValidator(new QIntValidator(1024, 32768));
 	_portInput->setText(QSettings().value("websocket/port", 9001).toString());
 	_portInput->setMaximumWidth(100);
-	_portInput->setToolTip("Websocket port (should be between 1024 and 32768)");
+	_portInput->setToolTip("WebSocket port (should be between 1024 and 32768)");
 
 	QGridLayout* layout = new QGridLayout();
 	layout->setMargin(0);

@@ -25,7 +25,7 @@ void WebSocketOutput::setPort(quint16 port) {
 }
 
 QString WebSocketOutput::description() const {
-	return QString("Websocket on port %1 @%2ms")
+	return QString("WebSocket on port %1 @%2ms")
 			.arg(QString::number(_port))
 			.arg(QString::number(interval()));
 }
