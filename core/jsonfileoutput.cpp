@@ -7,6 +7,7 @@
 #include <QJsonObject>
 #include <QDebug>
 #include "sensoroutputformatter.h"
+#include "sensor.h"
 
 JsonFileOutput::JsonFileOutput(QObject *parent) : SensorOutput(parent) {
 	_rootArray = 0;
@@ -61,7 +62,7 @@ void JsonFileOutput::handleCapture(const QList<float>& data) {
 		QJsonObject obj;
 		obj.insert("timestamp", QJsonValue(QDateTime::currentMSecsSinceEpoch()));
 		for (int i = 0; i < data.count(); i++) {
-			obj.insert(QString("SERIAL_%1").arg(i), QJsonValue(data.at(i)));
+			obj.insert(Sensor::variableName(i + 1), QJsonValue(data.at(i)));
 		}
 
 		_rootArray->append(obj);
