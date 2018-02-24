@@ -1,7 +1,7 @@
 # Sensor Bridge Client
 
 This is the client that connects to the 
-[Sensor Bridge board](http://https://github.com/sensorlab030/sensorbridge). It
+[Sensor Bridge board](https://github.com/sensorlab030/sensorbridge). It
 collects data via the serial port from the sensors connected to the board and 
 allows the data to be recorded to CSV or JSON files, or served via websockets.
 
